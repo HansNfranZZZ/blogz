@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://buildablog:lc101@localhost:8889/buildablog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:lc101@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
@@ -15,10 +15,26 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     body = db.Column(db.Text)
+    owner_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
-    def __init__(self, title, body):
+    def __init__(self, title, body, user):
         self.title = title
         self.body = body
+        self.user = user
+        
+class User(db.Model):
+    id = db.Colummn(db.Integer, primary_key=True)
+    username = db.Column(db.string(120))
+    password = db.Column(db.string(30))
+    blogs = db.relationship("Blog", backref = "owner")
+
+    def __init__(self, username, owner):
+        self.username = username
+        self.owner = owner
+
+
+
+
 
 
 ### home page ###
@@ -45,7 +61,16 @@ def blog():
         return render_template('blog_history.html', post=post, title='Blog Entry')
 
 
-  ### new blog post page ###      
+  ### new blog post page ###    
+
+@app.route('/signup', methods=['POST', 'GET'])
+
+@app.route('/login', methods=['POST', 'GET'])
+
+@app.route('/index', methods=['POST', 'GET'])
+
+
+
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def new_post():
