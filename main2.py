@@ -23,10 +23,10 @@ class Blog(db.Model):
         self.user = user
         
 class User(db.Model):
-    id = db.Colummn(db.Integer, primary_key=True)
-    username = db.Column(db.string(120))
-    password = db.Column(db.string(30))
-    blogs = db.relationship("Blog", backref = "owner")
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120))
+    password = db.Column(db.String(30))
+    blogs = db.relationship("Blog", backref="owner")
 
     def __init__(self, username, owner):
         self.username = username
